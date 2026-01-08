@@ -1,34 +1,35 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve built React files
-const clientBuildPath = path.join(__dirname, '..', 'client', 'dist');
-app.use(express.static(clientBuildPath));
+// Middleware
+app.use(express.json());
 
-// Example API route
+// Example API routes
 app.get('/api/hello', (req, res) => {
- res.json({ message: 'Hello from Express on Hostinger!' });
+  res.json({ message: 'Hello from Express on Hostinger!' });
 });
 
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', NODE_ENV: process.env.NODE_ENV || 'development' });
+});
 
+// Serve client build only in production when it exists
+const clientDist = path.join(__dirname, '..', 'client', 'dist');
+if (process.env.NODE_ENV === 'production' && fs.existsSync(clientDist)) {
+  app.use(express.static(clientDist));
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/dist')));
+  // Fallback for SPA routes
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+    res.sendFile(path.join(clientDist, 'index.html'));
   });
+} else {
+  console.log(`Not serving client files (NODE_ENV=${process.env.NODE_ENV || 'development'}) - development mode`);
 }
 
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
-// Fallback to index.html for React Router / SPA
-app.get('*', (req, res) => {
- res.sendFile(path.join(clientBuildPath, 'index.html'));
-});
-
 app.listen(PORT, () => {
- console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT} (NODE_ENV=${process.env.NODE_ENV || 'development'})`);
 });

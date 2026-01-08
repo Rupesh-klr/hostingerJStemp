@@ -9,5 +9,9 @@
  "scripts": {
   "start": "node index.js",
   "start:prod": "cross-env NODE_ENV=production node index.js"
-}
+},
+
+ "devDependencies": {
+  "cross-env": "^7.0.3"
+  }
 }
