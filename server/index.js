@@ -17,19 +17,54 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', NODE_ENV: process.env.NODE_ENV || 'development' });
 });
 
-// Serve client build only in production when it exists
+// 1. Email Configuration with Fallbacks
+const DEFAULT_EMAIL = 'support@rupesh.com';
+const AUTH_EMAIL = process.env.AUTH_EMAIL || DEFAULT_EMAIL;
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || DEFAULT_EMAIL;
+const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL || DEFAULT_EMAIL;
+
 const clientDist = path.join(__dirname, '..', 'client', 'dist');
+const PATH_BASE = (process.env.VITE_PATH_BASE || '/live-app').replace(/\/$/, "");
+
+// 2. Define the Maintenance/Coming Soon HTML Template
+const maintenanceTemplate = (title, message) => `
+  <div style="text-align: center; margin-top: 100px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333;">
+    <h1 style="color: #d9534f;">${title}</h1>
+    <p style="font-size: 1.2rem;">${message}</p>
+    <div style="background: #f9f9f9; display: inline-block; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid #ddd;">
+      <p><strong>Admin:</strong> ${ADMIN_EMAIL}</p>
+      <p><strong>Support:</strong> ${SUPPORT_EMAIL}</p>
+      <p><strong>Auth Support:</strong> ${AUTH_EMAIL}</p>
+    </div>
+    <p style="margin-top: 30px; color: #777;">&copy; 2026 Digital Wallet Service</p>
+  </div>
+`;
+
+// 3. Routing Logic
 if (process.env.NODE_ENV === 'production' && fs.existsSync(clientDist)) {
-  app.use(express.static(clientDist));
+    // SUCCESS: Build exists, serve the SPA
+    console.log(`✅ Serving production build from: ${clientDist}`);
+    app.use(PATH_BASE, express.static(clientDist));
 
-  // Fallback for SPA routes
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(clientDist, 'index.html'));
-  });
+    app.get('*', (req, res) => {
+        if (req.originalUrl.startsWith(PATH_BASE)) {
+            res.sendFile(path.join(clientDist, 'index.html'));
+        } else {
+            // Path doesn't match BASE_PATH
+            res.status(200).send(maintenanceTemplate("Coming Soon", "This specific path is not yet active."));
+        }
+    });
 } else {
-  console.log(`Not serving client files (NODE_ENV=${process.env.NODE_ENV || 'development'}) - development mode`);
+    // FALLBACK: Build missing or in Development mode
+    console.warn("⚠️ Client distribution folder NOT found or in Dev mode. Showing maintenance page.");
+    
+    app.get('*', (req, res) => {
+        res.status(503).send(maintenanceTemplate(
+            "Under Maintenance", 
+            "We are currently updating our systems. Please visit after 2 days."
+        ));
+    });
 }
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT} (NODE_ENV=${process.env.NODE_ENV || 'development'})`);
 });
