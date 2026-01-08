@@ -1,10 +1,13 @@
 {
- "name": "my-hostinger-nodejs-app",
+ "name": "hostinger-js-template",
  "private": true,
  "scripts": {
- "build": "cd client && npm install && npm run build",
- "start": "cd server && npm install && node index.js"
- },
+  "client:install": "cd client && npm install",
+  "client:build": "cd client && npm run build",
+  "build": "npm run client:install && npm run client:build",
+  "start": "cd server && npm install --production && npm run start:prod"
+},
+
  "engines": {
  "node": ">=18"
  }
