@@ -5,14 +5,12 @@
   "client:install": "cd client && npm install",
   "server:install": "cd server && npm install",
   "client:build": "cd client && npm run build",
-
+    "go" : "npm run build && npm run start",
   "build": "npm run client:install && npm run client:build && npm run server:install",
-  "start": "cd server && npm  install && npm run start:prod"
-
-  ,"go" : "npm run build && npm run start"
+  "start": "npm run build && cd server && npm install && npm run start:prod"
  },
 
  "engines": {
  "node": ">=18"
  }
-}
+} 

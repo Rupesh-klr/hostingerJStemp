@@ -47,11 +47,24 @@ if (process.env.NODE_ENV === 'production' && fs.existsSync(clientDist)) {
     app.use(PATH_BASE, express.static(clientDist));
 
     app.get('*', (req, res) => {
-        if (req.originalUrl.startsWith(PATH_BASE)) {
+        if (req.path.includes("favicon.ico") ) {
+            const svgIcon = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                <text y=".9em" font-size="90">💰</text>
+            </svg>
+        `.trim();
+        res.setHeader('Content-Type', 'image/svg+xml');
+        res.send(svgIcon);
+        } else
+        if (req.path.includes("assets") || req.path.includes("favicon") || req.path.includes("index-")) {
+            res.sendFile(path.join(clientDist, req.path));
+        } else
+        if (req.path.startsWith(PATH_BASE)) {
             res.sendFile(path.join(clientDist, 'index.html'));
         } else {
             // Path doesn't match BASE_PATH
-            res.status(200).send(maintenanceTemplate("Coming Soon", "This specific path is not yet active."));
+            console.log(req.path);
+            res.status(200).send(maintenanceTemplate("Coming Soon", "This specific path is not yet active."+ PATH_BASE+ req.originalUrl));
         }
     });
 } else {
