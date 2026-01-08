@@ -1,0 +1,9 @@
+{
+ "name": "server",
+ "main": "index.js",
+ "dependencies": {
+ "express": "^4.21.0",
+ "serve-static": "^1.16.0",
+ "path-to-regexp": "^8.2.0"
+ }
+}
