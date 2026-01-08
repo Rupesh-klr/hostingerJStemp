@@ -1,19 +1,5 @@
-import { useEffect, useState } from 'react';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
 
-export default function App() {
- const [message, setMessage] = useState('Loading...');
-
- useEffect(() => {
- fetch('/api/hello')
- .then(r => r.json())
- .then(d => setMessage(d.message))
- .catch(() => setMessage('Error calling API'));
- }, []);
-
- return (
- <div>
- <h1>React + Express + Vite on Hostinger</h1>
- <p>{message}</p>
- </div>
- );
-}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
