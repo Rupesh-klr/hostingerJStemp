@@ -4,8 +4,9 @@
  "scripts": {
   "client:install": "cd client && npm install",
   "client:build": "cd client && npm run build",
-  "build": "npm run client:install && npm run client:build",
-  "start": "cd server && npm install --production && npm run start:prod"
+
+  "start": "cd server && NODE_ENV=production node index.js",
+  "build": "cd server && cross-env NODE_ENV=production node index.js"
 },
 
  "engines": {
