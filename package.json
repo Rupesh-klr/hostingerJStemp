@@ -3,18 +3,32 @@
  "main": "index.js",
  "private": true,
  "scripts": {
-  "build": "cd client && npm install --include=dev && npm run build",
-  "start": "cross-env NODE_ENV=production node index.js"
+  "build_sc": "cd client && npm install --include=dev && npm run build",
+  "start_sc": "npm cross-env NODE_ENV=production node index.js",
+
+  "client:install": "cd client && npm install",
+  "server:install": "npm install",
+  "client:build": "cd client && npm install --include=dev && npm run build",
+  "go" : "npm run build && npm run start",
+  "build": " npm run server:install  && npm run client:build",
+  "start": "npm run build &&  cross-env NODE_ENV=production node index.js",
+  "start1": "npm run build &&  npm install && npm run start:prod"
  },
  "dependencies": {
   "express": "^4.21.0",
   "serve-static": "^1.16.0",
-  "path-to-regexp": "^8.2.0",
+  "path-to-regexp": "^8.2.0"
+  
+  ,
   "react": "^19.0.3",
   "react-dom": "^19.0.3"
  },
  "devDependencies": {
   "cross-env": "^7.0.3"
+  ,
+
+ "@vitejs/plugin-react": "^4.0.0",
+ "vite": "^6.0.0"
  },
  "engines": {
   "node": ">=18"
