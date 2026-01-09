@@ -12,15 +12,13 @@ app.use(express.json());
 // 1. Define the absolute path to the logs folder at the PROJECT ROOT
 const logDir = path.join(process.cwd(), 'logs');
 const logFileName = 'app.log';
-const logFilePath = path.join(logDir, logFileName);
 
 // 2. Ensure the directory exists in the root
 if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir, { recursive: true });
 }
-// const logFileName = 'app.log';
-
 if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
+const logFilePath = path.join(logDir, logFileName);
 
 const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
 const formatLog = (level, args) => {
@@ -76,18 +74,11 @@ console.log(`Logging to ${req.path}`);
  const offset = parseInt(req.query.offset) || 500;
 
     if (!fs.existsSync(logFilePath)) {
-        return res.status(404).send("<h1>No log file found yet.</h1>");
+        return res.status(404).send("<h1>No log file found yet. under main directory.</h1>");
     }
-
-    // Read the file and get last 500 lines
-    // const logs = fs.readFileSync(logFilePath, 'utf8').split('\n');
-    // const last500 = logs.slice(-500).join('\n');
-
-    // Simple HTML Template with Refresh and Previous buttons
     try {
         // Only the requested lines are processed in memory
         const lastLines = tailFile(logFilePath, offset);
-
         res.send(`
             <html>
             <head>
@@ -117,6 +108,10 @@ console.log(`Logging to ${req.path}`);
     } catch (err) {
         res.status(500).send("Error reading logs: " + err.message);
     }
+    // Read the file and get last 500 lines
+    // const logs = fs.readFileSync(logFilePath, 'utf8').split('\n');
+    // const last500 = logs.slice(-500).join('\n');
+    // Simple HTML Template with Refresh and Previous buttons
     // res.send(`
     //     <html>
     //         <head>
