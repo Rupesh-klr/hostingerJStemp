@@ -145,7 +145,10 @@ const AUTH_EMAIL = process.env.AUTH_EMAIL || DEFAULT_EMAIL;
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || DEFAULT_EMAIL;
 const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL || DEFAULT_EMAIL;
 
-const clientDist = path.join(__dirname, '..', 'client', 'dist');
+// const clientDist = path.join(__dirname, '..', 'client', 'dist');
+console.log(`Current working directory: ${process.cwd()}`);
+console.log(`__dirname: ${__dirname}`);
+const clientDist = path.join(process.cwd(), 'client', 'dist');
 const PATH_BASE = (process.env.VITE_PATH_BASE || '/live-app').replace(/\/$/, "");
 
 // 2. Define the Maintenance/Coming Soon HTML Template
@@ -198,9 +201,9 @@ console.log(`Logging to ${req.path}`);
     
     app.get('*', (req, res) => {
 
-console.log(`Under Maintenance ${req.path}`);
+  console.log(`Under Maintenance ${req.path}`);
         res.status(503).send(maintenanceTemplate(
-            "Under Maintenance", 
+            "Under Maintenance" + req.path + `Env:- ${process.env.NODE_ENV} ; ${process.env.NODE_ENV === 'production'}; clientFileEsists:- ${fs.existsSync(clientDist)} FilePath:- ${clientDist}`, 
             "We are currently updating our systems. Please visit after 2 days."+req.path
         ));
     });
