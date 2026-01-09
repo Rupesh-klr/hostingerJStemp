@@ -17,9 +17,9 @@ const logFileName = 'app.log';
 if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir, { recursive: true });
 }
-if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
 const logFilePath = path.join(logDir, logFileName);
 
+if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
 const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
 const formatLog = (level, args) => {
     const timestamp = new Date().toISOString();
@@ -72,9 +72,11 @@ app.get('/lastlog', (req, res) => {
 
 console.log(`Logging to ${req.path}`);
  const offset = parseInt(req.query.offset) || 500;
-
     if (!fs.existsSync(logFilePath)) {
-        return res.status(404).send("<h1>No log file found yet. under main directory.</h1>");
+
+        if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
+        const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
+        return res.status(404).send(`Log file not found at ${logFilePath};<h1>No log file found yet. under main directory.</h1>`);
     }
     try {
         // Only the requested lines are processed in memory
