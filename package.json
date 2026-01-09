@@ -1,5 +1,6 @@
 {
  "name": "hostinger-js-template",
+ "main": "server/index.js",
  "private": true,
  "scripts": {
   "client:install": "cd client && npm install",
@@ -10,6 +11,15 @@
   "start": "node server/index.js",
   "start1": "npm run build && cd server && npm install && npm run start:prod"
  },
+
+ "dependencies": {
+  "express": "^4.21.0",
+  "serve-static": "^1.16.0",
+  "path-to-regexp": "^8.2.0"
+ },
+ "devDependencies": {
+  "cross-env": "^7.0.3"
+  },
 
  "engines": {
  "node": ">=18"
