@@ -1,15 +1,15 @@
 {
  "name": "hostinger-js-template",
- "main": "server/index.js",
+ "main": "index.js",
  "private": true,
  "scripts": {
   "client:install": "cd client && npm install",
-  "server:install": "cd server && npm install",
+  "server:install": "npm install",
   "client:build": "cd client && npm run build",
-    "go" : "npm run build && npm run start",
+  "go" : "npm run build && npm run start",
   "build": "npm run client:install && npm run client:build && npm run server:install",
-  "start": "node server/index.js",
-  "start1": "npm run build && cd server && npm install && npm run start:prod"
+  "start": "npm run build && node index.js",
+  "start1": "npm run build &&  npm install && npm run start:prod"
  },
 
  "dependencies": {
