@@ -13,9 +13,10 @@
   "client:build-temp": "cd client && npm install --include=dev && npm run build",
   "go" : "npm run build && npm run start",
 
-   "build-temp": " npm run server:install  && npm run client:build",
   
-    "build-tmp": " npm run server:install  && cd client && npm install && npm install --include=dev && npm run build",
+   "build": " npm run server:install  && npm run client:build",
+  "build-temp1": " npm run server:install  && npm run client:build",
+  "build-tmp": " npm run server:install  && cd client && npm install && npm install --include=dev && npm run build",
   "build-temp": " npm run server:install  && npm run client:build",
   "start": "npm run build &&  cross-env NODE_ENV=production node index.js",
   "start1": "npm run build &&  npm install && npm run start:prod"
