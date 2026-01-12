@@ -3,7 +3,7 @@
  "private": true,
  "scripts": {
  "dev": "vite",
- "build": "vite build",
+ "client-build": "vite build",
  "preview": "vite preview"
  },
  "dependencies": {
