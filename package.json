@@ -8,7 +8,9 @@
 
   "client:install": "cd client && npm install",
   "server:install": "npm install",
-  "client:build": "cd client && npm install --include=dev && npm run build",
+  "client:build": " npm install --include=dev && npm run build",
+  
+  "client:build-temp": "cd client && npm install --include=dev && npm run build",
   "go" : "npm run build && npm run start",
   "build": " npm run server:install  && npm run client:build",
   "start": "npm run build &&  cross-env NODE_ENV=production node index.js",
